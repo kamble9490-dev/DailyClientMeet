@@ -56,6 +56,8 @@ stages:
         artifactName: 'drop'
 
 - stage: Deploy
+  displayName: Deploy Stage
+
   dependsOn: Build
 
   jobs:
@@ -67,5 +69,14 @@ stages:
     - download: current
       artifact: drop
 
-    - script: echo Deploy stage started
+    - task: AzureWebApp@1
+      displayName: Deploy To Azure App Service
+
+      inputs:
+        azureSubscription: 'AzureConnection'
+        appType: 'webApp'
+
+        appName: 'dailyclientmeet-demo'
+
+        package: '$(Pipeline.Workspace)/drop/**/*.zip'
  
