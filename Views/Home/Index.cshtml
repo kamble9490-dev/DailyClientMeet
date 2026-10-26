@@ -1,0 +1,424 @@
+﻿
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <!-- SIDEBAR -->
+
+        <div class="col-md-2 bg-dark text-white vh-100">
+
+            <h4 class="mt-3 mb-4 text-center">
+                SAP Daily Status
+            </h4>
+
+            <ul class="nav flex-column">
+
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white"
+                       href="#">
+                        <i class="fas fa-home"></i>
+                        Home
+                    </a>
+                </li>
+
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white"
+                       href="#">
+                        <i class="fas fa-tasks"></i>
+                        Tasks
+                    </a>
+                </li>
+
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white"
+                       href="#">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Incidents
+                    </a>
+                </li>
+
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white"
+                       href="#">
+                        <i class="fas fa-exchange-alt"></i>
+                        Changes
+                    </a>
+                </li>
+
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white"
+                       asp-controller="Excel"
+                       asp-action="Upload">
+
+                        <i class="fas fa-file-excel"></i>
+                        Upload Excel
+
+                    </a>
+                </li>
+
+               
+
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-white"
+                       href="#">
+                        <i class="fas fa-chart-line"></i>
+                        Reports
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <!-- CONTENT -->
+
+        <div class="col-md-10">
+
+            <div class="d-flex justify-content-between mt-3">
+
+                <h3>Dashboard</h3>
+
+                <h5>
+                    @DateTime.Now.ToString("dd-MMM-yyyy")
+                </h5>
+
+            </div>
+
+            <hr />
+
+            <!-- KPI Cards -->
+
+            <div class="row">
+
+                <div class="col-md-2">
+
+                    <div class="card bg-primary text-white">
+
+                        <div class="card-body">
+
+                            <h5>Total Tasks</h5>
+
+                            <h2>32</h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <div class="card bg-danger text-white">
+
+                        <div class="card-body">
+
+                            <h5>Incidents</h5>
+
+                            <h2>18</h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <div class="card bg-warning">
+
+                        <div class="card-body">
+
+                            <h5>CRs</h5>
+
+                            <h2>12</h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="card bg-success text-white">
+
+                        <div class="card-body">
+
+                            <h5>Closed This Month</h5>
+
+                            <h2>20</h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="card bg-secondary text-white">
+
+                        <div class="card-body">
+
+                            <h5>Awaiting Client</h5>
+
+                            <h2>6</h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <br />
+
+            <!-- Support Locations -->
+
+            <div class="card">
+
+                <div class="card-header">
+                    Global Support Locations
+                </div>
+
+                <div class="card-body">
+
+                    <span class="badge bg-primary">India</span>
+
+                    <span class="badge bg-danger">China</span>
+
+                    <span class="badge bg-success">Argentina</span>
+
+                    <span class="badge bg-warning">USA</span>
+
+                    <span class="badge bg-info">Canada</span>
+
+                    <span class="badge bg-dark">Australia</span>
+
+                </div>
+
+            </div>
+
+            <br />
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            Incident / Task Trend
+                        </div>
+
+                        <div class="card-body">
+
+                            <canvas id="chart1"></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            Current Month Calendar
+                        </div>
+
+                        <div class="card-body">
+
+                            <input type="date"
+                                   class="form-control"
+                                   value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <br />
+
+            <!-- Add New -->
+
+            <div class="card">
+
+                <div class="card-header">
+                    Quick Actions
+                </div>
+
+                <div class="card-body">
+
+                    <a class="btn btn-primary">
+                        Add Incident
+                    </a>
+
+                    <a class="btn btn-warning">
+                        Add Change Request
+                    </a>
+
+                    <a class="btn btn-success">
+                        Add Task
+                    </a>
+
+                    <a class="btn btn-info">
+                        Upload Excel
+                    </a>
+
+                </div>
+
+            </div>
+
+            <br />
+
+            <!-- Interactive Grid -->
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    Service Tasks Details
+
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table table-bordered table-hover">
+
+                        <thead class="table-dark">
+
+                            <tr>
+
+                                <th>ID</th>
+
+                                <th>Type</th>
+
+                                <th>Requestor</th>
+
+                                <th>Assigned To</th>
+
+                                <th>Status</th>
+
+                                <th>Country</th>
+
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>INC10001</td>
+
+                                <td>Incident</td>
+
+                                <td>John</td>
+
+                                <td>Amit</td>
+
+                                <td>
+                                    <span class="badge bg-danger">
+                                        Open
+                                    </span>
+                                </td>
+
+                                <td>India</td>
+
+                                <td>
+                                    <button class="btn btn-sm btn-primary">
+                                        View
+                                    </button>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>CR20001</td>
+
+                                <td>Change</td>
+
+                                <td>Client A</td>
+
+                                <td>Raj</td>
+
+                                <td>
+                                    <span class="badge bg-warning">
+                                        In Progress
+                                    </span>
+                                </td>
+
+                                <td>USA</td>
+
+                                <td>
+                                    <button class="btn btn-sm btn-primary">
+                                        View
+                                    </button>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    var ctx =
+        document.getElementById('chart1');
+
+    new Chart(ctx, {
+
+        type: 'bar',
+
+        data: {
+
+            labels: [
+                'Tasks',
+                'Incidents',
+                'Changes'
+            ],
+
+            datasets: [{
+
+                label: 'Current Month',
+
+                data: [56, 18, 12],
+
+                backgroundColor: [
+                    'blue',
+                    'red',
+                    'orange'
+                ]
+
+            }]
+
+        }
+
+    });
+
+</script>
