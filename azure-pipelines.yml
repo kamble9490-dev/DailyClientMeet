@@ -1,0 +1,40 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+
+- task: UseDotNet@2
+  displayName: Install .NET SDK
+  inputs:
+    packageType: 'sdk'
+    version: '8.0.x'
+
+- task: DotNetCoreCLI@2
+  displayName: Restore Packages
+  inputs:
+    command: 'restore'
+
+- task: DotNetCoreCLI@2
+  displayName: Build Solution
+  inputs:
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Publish Application
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifacts
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'drop'
