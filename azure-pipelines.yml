@@ -4,23 +4,87 @@ trigger:
 pool:
   name: Default
 
-steps:
+variables:
+  buildConfiguration: 'Release'
 
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '8.0.x'
+stages:
 
-- script: dotnet restore
-  displayName: Restore
+- stage: Build
+  displayName: Build Stage
 
-- script: dotnet build --configuration Release
-  displayName: Build
+  jobs:
 
-- script: dotnet publish --configuration Release -o $(Build.ArtifactStagingDirectory)
-  displayName: Publish
+  - job: Build
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathToPublish: '$(Build.ArtifactStagingDirectory)'
-    artifactName: 'drop'
+    steps:
+
+    - task: UseDotNet@2
+      displayName: Install .NET
+
+      inputs:
+        packageType: 'sdk'
+        version: '8.0.x'
+
+    - task: DotNetCoreCLI@2
+      displayName: Restore
+
+      inputs:
+        command: restore
+
+    - task: DotNetCoreCLI@2
+      displayName: Build
+
+      inputs:
+        command: build
+        arguments: '--configuration $(buildConfiguration)'
+
+    - task: DotNetCoreCLI@2
+      displayName: Publish
+
+      inputs:
+        command: publish
+        publishWebProjects: true
+        arguments: >
+          --configuration $(buildConfiguration)
+          --output $(Build.ArtifactStagingDirectory)
+
+    - task: PublishBuildArtifacts@1
+      displayName: Publish Artifact
+
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'drop'
+
+- stage: Deploy
+  displayName: Deploy Stage
+
+  dependsOn: Build
+
+  jobs:
+
+  - deployment: DeployToAzure
+
+    environment: Prod
+
+    strategy:
+
+      runOnce:
+
+        deploy:
+
+          steps:
+
+          - download: current
+
+            artifact: drop
+
+          - task: AzureWebApp@1
+            displayName: Deploy To Azure App Service
+
+            inputs:
+              azureSubscription: 'AzureConnection'
+              appType: 'webApp'
+
+              appName: 'dailyclientmeet-demo'
+
+              package: '$(Pipeline.Workspace)/drop/**/*.zip'
